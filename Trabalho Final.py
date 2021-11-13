@@ -6,7 +6,6 @@
 #Classe que ira armazenar a funções do nodo da árvore trie.
 from types import NoneType
 
-
 class TrieNode: 
     def __init__(self, char): 
         self.char = char 
@@ -106,7 +105,7 @@ def horner_method(word, M):
             test += 1                                           #Marca que passou pela primeira virgula.
         if (test == 1) and ((i != '\n') and (i != ',')):        #Testa se o char eh diferente de "\n" e ",".            
             num = ord(i)                                        #Caso seja diferente, transforma o char para int e acumula em uma soma.
-            hash_value = ((sigN * hash_value) + num) % M  #Cria um polinomio correspondente a palavra.
+            hash_value = ((sigN * hash_value) + num) % M        #Cria um polinomio correspondente a palavra.
             sigN -= 1            
     return(hash_value)
 
@@ -164,7 +163,7 @@ hash_table(rating, M, rating_vet)       #Chama a funcao para criar a tabela hash
 
 #------------------------------------------------------------------
 #Criação da tabela Hash com as informações complementares dos jogadores.
-M = int(len(players))                             #M = len(players), já que não pode ocorrer colisões.
+M = int(len(players)/5)                           #M = len(players), já que não pode ocorrer colisões.
 players_vet = [[] for _ in range(0,M)]            #Vetor que ira armazenar a tabela hash com as informações adicionais de cada jogador.
 hash_table_players(players, M, players_vet)       #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
