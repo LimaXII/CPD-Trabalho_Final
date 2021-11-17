@@ -4,7 +4,7 @@
 #Funcao que cria a tabela hash.    
 
 #Classe que ira armazenar a funções do nodo da árvore trie.
-from types import NoneType
+#from types import NoneType
 
 class TrieNode: 
     def __init__(self, char): 
@@ -59,29 +59,38 @@ def insert_trie(contents):
                 string = string + (i)           #Cria uma string com o nome completo do jogador.                         
         tr.insert(string)                       #Insere ela na trie.
 
+
+
+
 def hash_table(contents, M, vet):
     #Variavel que ira guardar o numero correspondente a cada nome    
     for x in range (0, len(contents)):                  #Percorre todas os nomes da lista.                
-        hash_value = horner_method(contents[x], M)      #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
-        hash_insert(hash_value, vet,contents[x])        #Chama a funcao que ira inserir os nomes na tabela hash.
+        hash_value = horner_method_players(contents[x][0], M)      #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
+        hash_insert_rating(hash_value, vet,contents[x])        #Chama a funcao que ira inserir os nomes na tabela hash.
 
 def hash_table_players(contents, M, vet):
     #Variavel que ira guardar o numero correspondente a cada nome    
     for x in range (0, len(contents)):                      #Percorre todas os nomes da lista.                
-        hash_value = horner_method_players(contents[x], M)  #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
+        hash_value = horner_method_players(contents[x][0], M)  #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
         hash_insert(hash_value, vet,contents[x])            #Chama a funcao que ira inserir os nomes na tabela hash.
+
+def hash_table_players_in_rating(contents, M, vet):
+    #Variavel que ira guardar o numero correspondente a cada nome    
+    for x in range (0, len(contents)):                      #Percorre todas os nomes da lista.                
+        hash_value = horner_method_players(contents[x][0], M)  #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
+        hash_insert_names_in_media(hash_value, vet,contents[x][0]) 
+
+def insert_ratings(contents, M, vet):
+    #Variavel que ira guardar o numero correspondente a cada nome    
+    for x in range (0, len(contents)):                      #Percorre todas os nomes da lista.                
+        hash_value = horner_method_players(contents[x][1], M)  #Chama a funcao do metodo de Horner, para achar uma posicao adequada para o nome na tabela hash.                               
+        hash_insert_ratings_in_media(hash_value, vet,contents[x]) 
+
 
 #Calcula o polinomio de horner para a tabela hash dos JOGADORES.
 def horner_method_players(word, M):
     p = 31
-    hash_value = 0
-    test = 0
-    for i in word:
-        if (i == ','):
-            test += 1
-        if (test == 1) and ((i != '\n') and (i != ',')):
-            num = ord(i)
-            hash_value = (p * hash_value + num) % M
+    hash_value = (p * int(word)) % M
     return(hash_value)      #Retorna a posição do vetor a ser colocado o jogador.
 
 #Mesma função que a de cima, mas simplificada.
@@ -114,6 +123,36 @@ def hash_insert(pos, vet, name):
     vet[pos].append(name)
     return
 
+def hash_insert_ratings_in_media(pos, vet, name):     
+    for i in range(0,len(vet[pos])):
+        if(vet[pos][i][0]==name[1]):
+            vet[pos][i].append(name[2])
+            return
+    print('error')
+    return
+
+def hash_insert_names_in_media(pos, vet, name):     
+    for i in range(0,len(vet[pos])):
+        if(vet[pos][i]== [] ):
+            vet[pos][i].append(name)
+            return
+    vet[pos].append([])
+    i+=1
+    vet[pos][i].append(name)
+    return
+        
+
+def hash_insert_rating(pos, vet, name):     
+    for i in range(0,len(vet[pos])):
+        if(vet[pos][i][0]==name[0]): #se o usuário já deu rating para outro jogador
+            vet[pos][i].append(name[1]) #apenas dá um append com o ID do jogador e o rating
+            vet[pos][i].append(name[2])
+            return
+    vet[pos].append(name)
+    return
+
+
+
 #Realiza a consulta na tabela hash dos jogadores.
 def realizar_consulta_players(vet,name):    
     aux = horner_method_players_smp(name,len(vet))   #Calcula a posição em que está o nome solicitado na tabela hash.
@@ -133,16 +172,28 @@ def realizar_consulta_players(vet,name):
 #Leitura dos arquivos do trabalho.
 with open('players_clean2.csv') as f:   #Usei o arquivo clean2. O arquivo original não tava lendo por conta da acentuação em alguns nomes.
     players = f.readlines()             #Armazena cada campo em uma posição do vetor players.
-                      
+for i in range(0,len(players)):
+    a=players[i].split(',')
+    players[i]=a
+
 #with open('rating.csv') as f:          #Lê o arquivo rating. Arquivo ENORME que consome muito do programa. Precisamos rever isso.
 #    rating = f.readlines()             #Armazena cada campo em uma posição do vetor rating.
 
 with open('minirating.csv') as f:       #Arquivo minirating. To usando ele só pra não travar o programa inteiro.
     rating = f.readlines()              #Armazena cada campo em uma posição do vetor rating.   
 
+for i in range(0,len(rating)):
+    a=rating[i].split(',')
+    rating[i]=a        
+
+
 with open('tags.csv') as f:             #Lê o arquivo tags.csv. 
     tags = f.readlines()                #Armazena cada campo em um posição do vetor tags.
   
+for i in range(0,len(tags)):
+    a=tags[i].split(',')
+    tags[i]=a 
+
 del rating[0]                          #Elimina a primeira posição do vetor.
 del tags[0]                            #Elimina a primeira posição do vetor.
 del players[0]                         #Elimina a primeira posição do vetor.
@@ -157,6 +208,25 @@ rating_vet = [[] for _ in range(0,M)]   #Vetor que ira armazenar a tabela hash c
 hash_table(rating, M, rating_vet)       #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
 
+#caad valor dos ratings na tabela hash é um array com o primeiro elemento representando
+#o ID do usuário e os elementos seguintes são o ID do jogador que ele deu review e a nota 
+#atribuída, podendo repetir esses elementos mais de uma vez caso o usuário tenha dado review 
+#a mais de um jogador EX:
+
+#['20434', '220440', '5.0\n', '200529', '3.0\n']
+#ID do usuário: 20434
+#review para o jogador de ID 220440: 5.0
+#review para o jogador de ID 200529: 3.0
+
+
+
+'''
+for i in range(0,len(rating_vet)):
+    if(len(rating_vet[i])>0):
+        for j in range(0,len(rating_vet[i])):
+            if(len(rating_vet[i][j])>3):
+                print(rating_vet[i][j])
+                '''
 #------------------------------------------------------------------
 #print(rating_vet)                      #Teste da tabela hash das ratings.
 #------------------------------------------------------------------
@@ -168,6 +238,15 @@ players_vet = [[] for _ in range(0,M)]            #Vetor que ira armazenar a tab
 hash_table_players(players, M, players_vet)       #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
 
+players_media =[[[]] for _ in range(0,M)]
+hash_table_players_in_rating(players,M,players_media)
+
+insert_ratings(rating,M,players_media)
+
+print(rating_vet[3])
+
+print(players_vet[1])
+print(players_media[422])
 #------------------------------------------------------------------
 #Árvore trie com os nomes dos jogadores.
 tr = Trie()
@@ -180,4 +259,18 @@ print("sofifa_id   name   player_positions   rating   count")
 for x in consult:                   #Para cada nome encontrado.
     info = realizar_consulta_players(players_vet,x)      #Recebe o resto das informações pela tabela hash dos jogadores.    
     print(info)                     #Printa as informações adicionais.
-#------------------------------------------------------------------
+#--------------------------------------------------------
+# 
+#   O que a gente tem de lista e array
+# 
+# 
+#   rating_vet = usuário,jogador,rating,jogador,rating...
+#
+#   players_vet = ID, nome, posição
+# 
+#   players_media = ID, rating, rating, rating...
+# 
+# #
+#
+# 
+# ----------
