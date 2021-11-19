@@ -141,6 +141,13 @@ def realizar_consulta_players(vet,name):
             return (string)                         #Retorna todas as informações sobre o jogador solicitado.    
     return('Not found.')                            #Caso o jogador não exista.
 
+#Função que consulta a hash pelo ID do jogador
+def hash_consult_id(vet, id_player):
+    aux = horner_method_players(id_player, len(vet))
+    for i in range(0, len(vet[aux])):
+        if (id_player == vet[aux][i][0]):
+            return (vet[aux][i][0])
+
 #Função que transforma um vetor de string em uma string normal.
 def transform_to_str(text):
     str1 = ""
@@ -203,12 +210,18 @@ for i in range(0,len(rating_vet)):
             if(len(rating_vet[i][j])>3):
                 print(rating_vet[i][j])
                 '''
-
 #------------------------------------------------------------------
 #Criação da tabela Hash com as informações complementares dos jogadores.
 M = int(len(players)/5)                           
 players_vet = [[] for _ in range(0,M)]            #Vetor que ira armazenar a tabela hash com as informações adicionais de cada jogador.
-hash_table_players(players, M, players_vet)       #Chama a funcao para criar a tabela hash.
+hash_table(players, M, players_vet)              #Chama a funcao para criar a tabela hash.
+#------------------------------------------------------------------
+
+#------------------------------------------------------------------
+#Criação da tabela Hash com as informações complementares dos jogadores.
+M = int(len(players)/5)                           
+players_vet_name = [[] for _ in range(0,M)]            #Vetor que ira armazenar a tabela hash com as informações adicionais de cada jogador.
+hash_table_players(players, M, players_vet_name)       #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
 players_media =[[[]] for _ in range(0,M)]
 hash_table_players_in_rating(players,M,players_media)
@@ -218,12 +231,13 @@ insert_ratings(rating,M,players_media)
 #Árvore trie com os nomes dos jogadores.
 tr = Trie()
 #Chama a função que vai inserir na árvore trie todos os nomes dos jogadores.
-insert_trie(players_vet)
+insert_trie(players_vet_name)
 
 #Finaliza a criação de estruturas para o programa.
 end_time = time.time()
 print("Time to create the structures " + '{:.2f}'.format(end_time - start_time) + " seconds.")
 
+rating = 0
 running = 1                         #Variável que vai controlar quando o programa irá terminar.
 while (running == 1):               #Loop para deixar o programa rodando.
     text = input("Please insert a name to search. ")
@@ -237,9 +251,17 @@ while (running == 1):               #Loop para deixar o programa rodando.
             text = transform_to_str(text)        #Transforma o vetor de volta em uma string.   
             consult = (tr.search(text))          #Pega todos os nomes, dado o prefixo dado   
             print("\nsofifa_id   name              player_positions   rating   count")
-            for x in consult:                                        #Para cada nome encontrado.
-                info = realizar_consulta_players(players_vet,x)      #Recebe o resto das informações pela tabela hash dos jogadores.    
-                print(info)                                          #Printa as informações adicionais.
+            for x in consult:                                             #Para cada nome encontrado.
+                info = realizar_consulta_players(players_vet_name,x)      #Recebe o resto das informações pela tabela hash dos jogadores.
+                str_aux = info
+                str_aux = str_aux.split(" ")
+                player_note = hash_consult_id(players_media, str_aux[0])
+                count = (len(player_note) - 1)
+                for i in range (1,len(player_note)):
+                    rating = rating + int(player_note[i])
+                rating = rating/len(player_note) - 1    
+                info = info + "       " + '{:.6f}'.format(rating) + "    " + str(count) 
+                print(info)                                               #Printa as informações adicionais.
         else:
             print("Please, insert a name after player")    #Caso o usuário insira somente "player".            
     else:
