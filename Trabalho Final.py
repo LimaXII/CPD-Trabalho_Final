@@ -268,8 +268,10 @@ def junta_as_tags(vet):
 
 
 
-
 #------------------------------------------------------------------
+
+start_time = time.time() #Inicia a contagem de tempo.
+
 #Leitura dos arquivos do trabalho.
 with open('players_clean2.csv') as f:   #Usei o arquivo clean2. O arquivo original não tava lendo por conta da acentuação em alguns nomes.
     players = f.readlines()             #Armazena cada campo em uma posição do vetor players.
@@ -370,7 +372,11 @@ tr = Trie()
 #Chama a função que vai inserir na árvore trie todos os nomes dos jogadores.
 insert_trie(players_vet_name)
 
+#Finaliza a criação de estruturas para o programa.
+end_time = time.time()
+print("Time to create the structures " + '{:.2f}'.format(end_time - start_time) + " seconds.")
 
+test = 0
 rating = 0
 running = 1                         #Variável que vai controlar quando o programa irá terminar.
 while (running == 1):               #Loop para deixar o programa rodando.
@@ -389,23 +395,22 @@ while (running == 1):               #Loop para deixar o programa rodando.
             print("\nsofifa_id   name              player_positions   rating   count")
             for x in consult:                                             #Para cada nome encontrado.
                 info = realizar_consulta_players(players_vet_name,x)      #Recebe o resto das informações pela tabela hash dos jogadores.
+                info = info.replace('"',"" )               #Remove todas as aspas duplas dos textos               
                 str_aux = info
                 str_aux = str_aux.split(" ")
                 player_note = hash_consult_id(players_media, str_aux[0])
-                count = (len(player_note) - 1)
+                count = (len(player_note) - 1)                
                 if(len(player_note)>1):
                     rating = player_note[1]
+                    rating = rating.replace("\n", "")       #Remove alguns \n que tinha no texto.
                 else:
                     rating = "NA"
-                info = info + "       " + str(rating) + "    " + str(count) 
+                info = info + "   " + str(rating) + "  " + str(count) 
                 print(info)                                               #Printa as informações adicionais.
         else:
-            print("Please, insert a name after player")    #Caso o usuário insira somente "player".            
-    
+            print("Please, insert a name after player")    #Caso o usuário insira somente "player".    
     elif(text[0] == 'tags'):
-        chamou_tags(text, tags)
-    
-    
+        chamou_tags(text, tags)    
     else:
         print("Wrong command. Please, try again. ")        #Caso o usuário insira algum comando inválido. 
 #--------------------------------------------------------
