@@ -89,8 +89,10 @@ def get_media(vet):                     #pega os ratings atribuidos a cada jogad
                     media += float(vet[i][j][k][0:3])
                     cont +=1
                 media = media/cont
-                media = ("{:.2}".format(media))
+                media = ("{:.5}".format(media))
                 vet[i][j][1] = media
+            elif(len(vet[i][j]) == 2):
+                vet[i][j][1] = vet[i][j][1][0:3]
 
 
 #Calcula o polinomio de horner para a tabela hash dos JOGADORES.
@@ -182,47 +184,19 @@ def hash_consult_id(vet, id_player):
             return (vet[aux][i])
 
 
-
-def chamou_tags(vet_insert, vet_tags):
-    if(len(vet_insert)<2):
-        print('Faltaram as tags')
-        return
-    lista_aux = junta_as_tags(vet_insert)
-    
-    lista_IDS = []
-    lista_IDS_sem_repet = []
-    for j in range(0,len(vet_tags)):
-        for k in range(2,len(vet_tags[j])):
-            if(lista_aux[0] == vet_tags[j][k]):
-                lista_IDS.append(vet_tags[j][1])
-    
-    for i in range(0, len(lista_IDS)):
-        for j in range(i+1,len(lista_IDS)):
-            if(lista_IDS[i] == lista_IDS[j]):
-                lista_IDS[j] = []
-
-    for i in range(0, len(lista_IDS)):
-        if(lista_IDS[i]):
-            lista_IDS_sem_repet.append(lista_IDS[i])
-    
-
-    for i in range(1,len(lista_aux)):
-        lista_IDS_sem_repet = busca_interseccao(lista_IDS_sem_repet,lista_aux[i],vet_tags)
-        print(len(lista_IDS_sem_repet))
-        
-
-
-    #aqui printar os jogadores e tals
-    # 
-    # 
-    # 
-    #     
-    print(lista_IDS_sem_repet) 
-    
-    return 
-
-
-
+#pega as tags separadas por espaço e junta elas pra serem consideradas
+#uma só
+def junta_as_tags(vet):
+    aux = []
+    stringaux = vet[1]
+    for i in range(2,len(vet)):
+        if((vet[i][0] == '\'') or (vet[i][0] == '\"')):
+            aux.append(stringaux[1:len(stringaux)-1])
+            stringaux = vet[i]
+        else:
+            stringaux = stringaux + ' ' + vet[i]
+    aux.append(stringaux[1:len(stringaux)-1])
+    return aux
 
 #pega a lista com os jogadores já verificados com a tag anterior
 #e verifica com as outras tags
@@ -251,21 +225,89 @@ def busca_interseccao(listaaqui,tag,vetoriginal):
     return(lista3)
 
 
-#pega as tags separadas por espaço e junta elas pra serem consideradas
-#uma só
-def junta_as_tags(vet):
-    aux = []
-    stringaux = vet[1]
-    for i in range(2,len(vet)):
-        if((vet[i][0] == '\'') or (vet[i][0] == '\"')):
-            aux.append(stringaux[1:len(stringaux)-1])
-            stringaux = vet[i]
+def chamou_tags(vet_insert, vet_tags,vetplay, vetmed):
+    if(len(vet_insert)<2):
+        print('Faltaram as tags')
+        return
+    lista_aux = junta_as_tags(vet_insert)
+    
+    lista_IDS = []
+    lista_IDS_sem_repet = []
+    for j in range(0,len(vet_tags)):
+        for k in range(2,len(vet_tags[j])):
+            if(lista_aux[0] == vet_tags[j][k]):
+                lista_IDS.append(vet_tags[j][1])
+    
+    for i in range(0, len(lista_IDS)):
+        for j in range(i+1,len(lista_IDS)):
+            if(lista_IDS[i] == lista_IDS[j]):
+                lista_IDS[j] = []
+
+    for i in range(0, len(lista_IDS)):
+        if(lista_IDS[i]):
+            lista_IDS_sem_repet.append(lista_IDS[i])
+    
+
+    for i in range(1,len(lista_aux)):
+        lista_IDS_sem_repet = busca_interseccao(lista_IDS_sem_repet,lista_aux[i],vet_tags)
+        
+        
+
+
+    #aqui printar os jogadores e tals
+    # 
+    # 
+    # 
+    #
+    for i in range(0, len(lista_IDS_sem_repet)):
+        printa_info_jogador(lista_IDS_sem_repet[i],vetplay,vetmed)
+    
+    return 
+
+
+
+
+
+
+
+
+def printa_info_jogador(idjog, vetjog, vetrat):
+    a = horner_method_players(idjog,len(vetjog))
+
+    
+    for i in range(0,len(vetjog[a])):
+        
+        if(vetjog[a][i][0] == idjog):
+            dados = vetjog[a][i]
+            break
+
+    for i in range(0,len(vetrat[a])):
+        if(vetrat[a][i][0] == idjog):
+            ratings = vetrat[a][i]
+            break  
+    stringfinal = dados[0] + ' '*(8-len(dados[0])) + dados[1] + ' '*(40 - len(dados[1]))
+    b = 0
+    for i in range(2, len(dados)):
+        if(i == 2):
+            if(i==(len(dados)-1)):
+                stringfinal = stringfinal + dados[i][:-1] + ' '
+                b = b + len(dados[i]) +3
+            else:
+                stringfinal = stringfinal + dados[i][1:] + ' '
+                b = b + len(dados[i])+1
+        elif(i == (len(dados)-1)):
+            stringfinal = stringfinal + dados[i][:-2] + ' '
+            b = b + len(dados[i])+1
         else:
-            stringaux = stringaux + ' ' + vet[i]
-    aux.append(stringaux[1:len(stringaux)-1])
-    return aux
-
-
+            stringfinal = stringfinal + dados[i] + ' '
+            b = b + len(dados[i])+1
+    stringfinal = stringfinal + ' '*(17 - b)
+    if(len(ratings)>1):
+        stringfinal = stringfinal + ratings[1] + ' '*(9-len(ratings[1])) + str(len(ratings)-1)
+        
+    else:
+        stringfinal = stringfinal + 'NA       NA'
+    print(stringfinal)
 
 
 #------------------------------------------------------------------
@@ -362,7 +404,7 @@ get_media(players_media)
 print(tags[1])
 print(rating_vet[3])
 print(players_vet[1])
-print(players_media[422])
+
 
 
 
@@ -376,6 +418,8 @@ insert_trie(players_vet_name)
 end_time = time.time()
 print("Time to create the structures " + '{:.2f}'.format(end_time - start_time) + " seconds.")
 
+printa_info_jogador('159354',players_vet,players_media)
+
 test = 0
 rating = 0
 running = 1                         #Variável que vai controlar quando o programa irá terminar.
@@ -383,7 +427,7 @@ while (running == 1):               #Loop para deixar o programa rodando.
     text = input("Please insert a name to search. ")
     text = text.lower()
     text = text.split(' ')          #Separa o texto em diferentes partes.
-    if (text[0].lower == 'exit'):         #Exit para terminar o programa.
+    if (text[0] == 'exit'):         #Exit para terminar o programa.
         print("Ending program.")
         running = 0             
     elif (text[0] == 'player'):     #Caso digite player, procura o jogador solicitado.                                           
@@ -410,7 +454,7 @@ while (running == 1):               #Loop para deixar o programa rodando.
         else:
             print("Please, insert a name after player")    #Caso o usuário insira somente "player".    
     elif(text[0] == 'tags'):
-        chamou_tags(text, tags)    
+        chamou_tags(text, tags,players_vet,players_media)    
     else:
         print("Wrong command. Please, try again. ")        #Caso o usuário insira algum comando inválido. 
 #--------------------------------------------------------
