@@ -4,7 +4,6 @@
 #Funcao que cria a tabela hash.    
 
 import time  #Usado para cronometrar o tempo para gerar as estruturas utilizadas no trabalho.
-
 #Classe que ira armazenar a funções do nodo da árvore trie.
 #from types import NoneType
 
@@ -94,7 +93,6 @@ def get_media(vet):                     #pega os ratings atribuidos a cada jogad
             elif(len(vet[i][j]) == 2):
                 vet[i][j][1] = vet[i][j][1][0:3]
 
-
 #Calcula o polinomio de horner para a tabela hash dos JOGADORES.
 def horner_method_players(word, M):
     p = 31
@@ -147,8 +145,7 @@ def hash_insert_names_in_media(pos, vet, name):
     vet[pos].append([])
     i+=1
     vet[pos][i].append(name)
-    return
-        
+    return        
 
 def hash_insert_rating(pos, vet, name):     
     for i in range(0,len(vet[pos])):
@@ -158,8 +155,6 @@ def hash_insert_rating(pos, vet, name):
             return
     vet[pos].append(name)
     return
-
-
 
 #Realiza a consulta na tabela hash dos jogadores.
 def realizar_consulta_players(vet,name):    
@@ -195,8 +190,7 @@ def arrumalista(listadevalores,jogadornovo,nummax):
     if(len(jogadornovo) == 1):
             return listapramandar
     if(len(listapramandar)<nummax):
-        listapramandar.append(jogadornovo)
-        
+        listapramandar.append(jogadornovo)        
     return listapramandar
 
 
@@ -214,24 +208,17 @@ def chamou_a_merda_das_posicoes(nummax,playvet,ratvet,posi):
                     else:
                         aux2 = playvet[i][j][k][1:].upper()
                         if(aux2 == posi):                    
-                            listabest = arrumalista(listabest,ratvet[i][j],nummax)
-                     
+                            listabest = arrumalista(listabest,ratvet[i][j],nummax)                     
                 elif(i == (len(playvet[i][j])-1)):
                     aux2 = playvet[i][j][k][:-2].upper()
                     if(aux2 == posi):                    
-                        listabest = arrumalista(listabest,ratvet[i][j],nummax)
-                    
+                        listabest = arrumalista(listabest,ratvet[i][j],nummax)                    
                 else:
                     aux2 = playvet[i][j][k]
                     if(aux2 == posi):                    
                         listabest = arrumalista(listabest,ratvet[i][j],nummax)
-
-
     for i in range(0, len(listabest)):
         printa_info_jogador(listabest[i][0],playvet,ratvet)
-
-
-
 
 #pega as tags separadas por espaço e junta elas pra serem consideradas
 #uma só
@@ -247,11 +234,8 @@ def junta_as_tags(vet):
     aux.append(stringaux[1:len(stringaux)-1])
     return aux
 
-
-
 #pega a lista com os jogadores já verificados com a tag anterior
 #e verifica com as outras tags
-
 def busca_interseccao(listaaqui,tag,vetoriginal):   
     lista2 = []
     for i in range(0,len(vetoriginal)):
@@ -259,8 +243,7 @@ def busca_interseccao(listaaqui,tag,vetoriginal):
             if(vetoriginal[i][j] == tag):
                 for k in range(0,len(listaaqui)):
                     if(vetoriginal[i][1] == listaaqui[k]):
-                        lista2.append(listaaqui[k])
-                        
+                        lista2.append(listaaqui[k])                        
                         break
     lista3 = []
     for i in range(0, len(lista2)):
@@ -271,10 +254,7 @@ def busca_interseccao(listaaqui,tag,vetoriginal):
     for i in range(0, len(lista2)):
         if(lista2[i]):
             lista3.append(lista2[i])
-
-
     return(lista3)
-
 
 def chamou_tags(vet_insert, vet_tags,vetplay, vetmed):
     if(len(vet_insert)<2):
@@ -296,20 +276,14 @@ def chamou_tags(vet_insert, vet_tags,vetplay, vetmed):
 
     for i in range(0, len(lista_IDS)):
         if(lista_IDS[i]):
-            lista_IDS_sem_repet.append(lista_IDS[i])
-    
+            lista_IDS_sem_repet.append(lista_IDS[i])    
 
     for i in range(1,len(lista_aux)):
         lista_IDS_sem_repet = busca_interseccao(lista_IDS_sem_repet,lista_aux[i],vet_tags)
-        
-
-    #aqui printar os jogadores e tals
-   
+           
     for i in range(0, len(lista_IDS_sem_repet)):
-        printa_info_jogador(lista_IDS_sem_repet[i],vetplay,vetmed)
-    
+        printa_info_jogador(lista_IDS_sem_repet[i],vetplay,vetmed)    
     return 
-
 
 def chamou_user(user,ratvet,vetjog,medjog):
     stringprintada = ''
@@ -328,22 +302,14 @@ def chamou_user(user,ratvet,vetjog,medjog):
                     stringprintada = stringprintada + ratvet[i][2][0:3]
                     print(stringprintada)
                     stringprintada = ''
-            
-
-
-
-
-
 
 def printa_info_jogador(idjog, vetjog, vetrat):
     a = horner_method_players(int(idjog),len(vetjog))
-
     
     for i in range(0,len(vetjog[a])):
         if(vetjog[a][i][0] == idjog):
             dados = vetjog[a][i]
             break
-
     for i in range(0,len(vetrat[a])):
         if(vetrat[a][i][0] == idjog):
             ratings = vetrat[a][i]
@@ -371,19 +337,17 @@ def printa_info_jogador(idjog, vetjog, vetrat):
             b = b + len(dados[i])+1
     stringfinal = stringfinal + ' '*(17 - b)
     if(len(ratings)>1):
-        stringfinal = stringfinal +'     '+ ratings[1] + ' '*(12-len(ratings[1])) + str(len(ratings)-1)
-        
+        stringfinal = stringfinal +'     '+ ratings[1] + ' '*(12-len(ratings[1])) + str(len(ratings)-1)        
     else:
         stringfinal = stringfinal + '     NA          NA'
     print(stringfinal)
-
 
 #------------------------------------------------------------------
 
 start_time = time.time() #Inicia a contagem de tempo.
 
 #Leitura dos arquivos do trabalho.
-with open('players_clean2.csv') as f:   #Usei o arquivo clean2. O arquivo original não tava lendo por conta da acentuação em alguns nomes.
+with open('players_clean2.csv') as f:   
     players = f.readlines()             #Armazena cada campo em uma posição do vetor players.
 
 for i in range(0,len(players)):
@@ -391,16 +355,12 @@ for i in range(0,len(players)):
     a = b.split(',')
     players[i] = a
 
-#with open('rating.csv') as f:          #Lê o arquivo rating.
-#    rating = f.readlines()             #Armazena cada campo em uma posição do vetor rating.
-
 with open('rating.csv') as f:       #Arquivo minirating. To usando ele só pra não travar o programa inteiro.
     rating = f.readlines()              #Armazena cada campo em uma posição do vetor rating.   
 
 for i in range(0,len(rating)):
     a=rating[i].split(',')
-    rating[i]=a        
-
+    rating[i]=a      
 
 with open('tags.csv') as f:             #Lê o arquivo tags.csv. 
     tags = f.readlines()                #Armazena cada campo em um posição do vetor tags.
@@ -411,11 +371,10 @@ for i in range(0,len(tags)):
     a = b.split(',')
     tags[i] = a
 
-del rating[0]                          #Elimina a primeira posição do vetor.
-del tags[0]                            #Elimina a primeira posição do vetor.
-del players[0]                         #Elimina a primeira posição do vetor.
+del rating[0]            #Elimina a primeira posição do vetor.
+del tags[0]              #Elimina a primeira posição do vetor.
+del players[0]           #Elimina a primeira posição do vetor.
 #------------------------------------------------------------------
-
 #------------------------------------------------------------------
 #N/M = 1/3
 M = int(len(rating)/4) #M será o tamanho da tabela Hash a ser criada para armazenar as médias das avaliações e o total de avaliações para cada jogador.
@@ -424,8 +383,7 @@ M = int(len(rating)/4) #M será o tamanho da tabela Hash a ser criada para armaz
 rating_vet = [[] for _ in range(0,M)]   #Vetor que ira armazenar a tabela hash com as notas de cada jogador.   
 hash_table(rating, M, rating_vet)       #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
-
-#caad valor dos ratings na tabela hash é um array com o primeiro elemento representando
+#cada valor dos ratings na tabela hash é um array com o primeiro elemento representando
 #o ID do usuário e os elementos seguintes são o ID do jogador que ele deu review e a nota 
 #atribuída, podendo repetir esses elementos mais de uma vez caso o usuário tenha dado review 
 #a mais de um jogador EX:
@@ -434,16 +392,12 @@ hash_table(rating, M, rating_vet)       #Chama a funcao para criar a tabela hash
 #ID do usuário: 20434
 #review para o jogador de ID 220440: 5.0
 #review para o jogador de ID 200529: 3.0
-
-
-
 #---------------------------------------
 #Criação da tabela Hash com as informações complementares dos jogadores.
 M = int(len(players)/5)                           
 players_vet = [[] for _ in range(0,M)]            #Vetor que ira armazenar a tabela hash com as informações adicionais de cada jogador.
 hash_table(players, M, players_vet)              #Chama a funcao para criar a tabela hash.
 #------------------------------------------------------------------
-
 #------------------------------------------------------------------
 #Criação da tabela Hash com as informações complementares dos jogadores.
 M = int(len(players)/5)                           
@@ -458,10 +412,6 @@ insert_ratings(rating,M,players_media)
 
 get_media(players_media)
 
-
-
-
-
 #------------------------------------------------------------------
 #Árvore trie com os nomes dos jogadores.
 tr = Trie()
@@ -472,10 +422,7 @@ insert_trie(players_vet_name)
 end_time = time.time()
 print("Time to create the structures " + '{:.2f}'.format(end_time - start_time) + " seconds.")
 
-printa_info_jogador('159354',players_vet,players_media)
-
 test = 0
-#rating = 0
 running = 1                         #Variável que vai controlar quando o programa irá terminar.
 while (running == 1):               #Loop para deixar o programa rodando.
     text = input("Please insert a name to search. ")
@@ -484,39 +431,32 @@ while (running == 1):               #Loop para deixar o programa rodando.
     if (text[0] == 'exit'):         #Exit para terminar o programa.
         print("Ending program.")
         running = 0             
-    elif (text[0] == 'player'):     #Caso digite player, procura o jogador solicitado.                                           
+    elif (text[0] == 'player'):             #Caso digite player, procura o jogador solicitado.                                           
         if (len(text) >= 2):
             text2 = text[1]
             for w in range(2,len(text)):
                 text2 = text2 + ' ' + text[w] 
-            consult = (tr.search(text2))          #Pega todos os nomes, dado o prefixo dado   
+            consult = (tr.search(text2))    #Pega todos os nomes, dado o prefixo dado   
             print("\nsofifa_id   name                                    player_positions   rating      count")
-            for x in consult:                                             #Para cada nome encontrado.
-                info = realizar_consulta_players(players_vet_name,x)      #Recebe o resto das informações pela tabela hash dos jogadores.
+            for x in consult:                                         #Para cada nome encontrado.
+                info = realizar_consulta_players(players_vet_name,x)  #Recebe o resto das informações pela tabela hash dos jogadores.
                 r = info.split(' ')
-                printa_info_jogador(r[0],players_vet,players_media)
-                                                     #Printa as informações adicionais.
+                printa_info_jogador(r[0],players_vet,players_media)   #Printa as informações adicionais.                                                     
         else:
             print("Please, insert a name after player")    #Caso o usuário insira somente "player".    
     elif(text[0] == 'tags'):
-        print("\nsofifa_id   name                                    player_positions   rating      count")
-           
+        print("\nsofifa_id   name                                    player_positions   rating      count")           
         chamou_tags(text, tags,players_vet,players_media)    
-    elif(text[0] == 'user'):
-        #arrumar aqui
-        
+    elif(text[0] == 'user'):        
         print("\nsofifa_id   name                                    global_rating      count       rating")
         chamou_user(text[1],rating,players_vet,players_media)
     elif(text[0][:3] == 'top'):
         numerotop = int(text[0][3:])    
         print("\nsofifa_id   name                                    player_positions   rating      count")
         chamou_a_merda_das_posicoes(numerotop,players_vet,players_media,text[1])
-        
-
     else:
         print("Wrong command. Please, try again. ")        #Caso o usuário insira algum comando inválido. 
-#--------------------------------------------------------
-# 
+#--------------------------------------------------------# 
 #   O que a gente tem de lista e array
 # 
 # 
@@ -524,7 +464,6 @@ while (running == 1):               #Loop para deixar o programa rodando.
 #
 #   players_vet = ID, nome, posição
 # 
-#   players_media = ID, rating, rating, rating...
-# 
+#   players_media = ID, rating, rating, rating...# 
 # #
 #----------
