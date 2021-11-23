@@ -287,6 +287,7 @@ def chamou_tags(vet_insert, vet_tags,vetplay, vetmed):
 
 def chamou_user(user,ratvet,vetjog,medjog):
     stringprintada = ''
+    listajog = []
     for i in range(0,len(ratvet)):
         if(str(user) == ratvet[i][0]):
             a = horner_method_players(ratvet[i][1],len(vetjog))
@@ -300,8 +301,19 @@ def chamou_user(user,ratvet,vetjog,medjog):
                             stringprintada = stringprintada + str(medjog[a][k][1]) + ' '*(19 - len(medjog[a][k][1])) + f + ' '*(12-len(f))
 
                     stringprintada = stringprintada + ratvet[i][2][0:3]
-                    print(stringprintada)
+                    t= float(stringprintada[-3:])
+                    p = [t,stringprintada]
+                    listajog.append(p)
                     stringprintada = ''
+    for j in range(1,len(listajog)):
+        for i in range(0,len(listajog)-j):
+            if(listajog[i][0]<listajog[i+1][0]):
+                aux = listajog[i][0]
+                listajog[i][0] = listajog[i+1][0]
+                listajog[i+1][0] = aux
+        
+    for i in range(0,len(listajog)):
+        print(listajog[i][1])
 
 def printa_info_jogador(idjog, vetjog, vetrat):
     a = horner_method_players(int(idjog),len(vetjog))
