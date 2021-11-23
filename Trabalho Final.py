@@ -202,15 +202,15 @@ def chamou_a_merda_das_posicoes(nummax,playvet,ratvet,posi):
             for k in range(2,len(playvet[i][j])):
                 if(k == 2):
                     if(k==(len(playvet[i][j])-1)):
-                        aux2 = playvet[i][j][k][:-1]
+                        aux2 = playvet[i][j][k][1:len(playvet[i][j][k]) - 1]
                         if(aux2 == posi):                    
                             listabest = arrumalista(listabest,ratvet[i][j],nummax)
                     else:
-                        aux2 = playvet[i][j][k][1:].upper()
+                        aux2 = playvet[i][j][k][1:]
                         if(aux2 == posi):                    
                             listabest = arrumalista(listabest,ratvet[i][j],nummax)                     
                 elif(i == (len(playvet[i][j])-1)):
-                    aux2 = playvet[i][j][k][:-2].upper()
+                    aux2 = playvet[i][j][k][:-2]
                     if(aux2 == posi):                    
                         listabest = arrumalista(listabest,ratvet[i][j],nummax)                    
                 else:
@@ -305,12 +305,12 @@ def chamou_user(user,ratvet,vetjog,medjog):
                     p = [t,stringprintada]
                     listajog.append(p)
                     stringprintada = ''
-    for j in range(1,len(listajog)):
-        for i in range(0,len(listajog)-j):
+    for j in range(0,len(listajog)):
+        for i in range(0,len(listajog)-1):
             if(listajog[i][0]<listajog[i+1][0]):
-                aux = listajog[i][0]
-                listajog[i][0] = listajog[i+1][0]
-                listajog[i+1][0] = aux
+                aux = listajog[i]
+                listajog[i] = listajog[i+1]
+                listajog[i+1] = aux
         
     for i in range(0,len(listajog)):
         print(listajog[i][1])
@@ -466,9 +466,8 @@ while (running == 1):               #Loop para deixar o programa rodando.
         numerotop = int(text[0][3:])    
         print("\nsofifa_id   name                                    player_positions   rating      count")
         tamanho_pos = len(text[1])
-        if text[1][0] == '"' and text[1][(tamanho_pos - 1)] == '"':
-            text[1] = text[1].replace('"', "")
-            chamou_a_merda_das_posicoes(numerotop,players_vet,players_media,text[1])
+        k = text[1][1:len(text[1]) - 1]      
+        chamou_a_merda_das_posicoes(numerotop,players_vet,players_media,k)
     else:
         print("Wrong command. Please, try again. ")        #Caso o usuário insira algum comando inválido. 
 #--------------------------------------------------------# 
