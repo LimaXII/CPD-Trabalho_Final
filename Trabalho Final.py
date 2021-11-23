@@ -453,7 +453,10 @@ while (running == 1):               #Loop para deixar o programa rodando.
     elif(text[0][:3] == 'top'):
         numerotop = int(text[0][3:])    
         print("\nsofifa_id   name                                    player_positions   rating      count")
-        chamou_a_merda_das_posicoes(numerotop,players_vet,players_media,text[1])
+        tamanho_pos = len(text[1])
+        if text[1][0] == '"' and text[1][(tamanho_pos - 1)] == '"':
+            text[1] = text[1].replace('"', "")
+            chamou_a_merda_das_posicoes(numerotop,players_vet,players_media,text[1])
     else:
         print("Wrong command. Please, try again. ")        #Caso o usuário insira algum comando inválido. 
 #--------------------------------------------------------# 
